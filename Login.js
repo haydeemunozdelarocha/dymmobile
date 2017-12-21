@@ -14,7 +14,7 @@ import {
   AlertIOS,
   Image
 } from 'react-native';
-getProveedores();
+
 var USERNAME = 'id_username';
 
 var Form = t.form.Form;
@@ -24,12 +24,11 @@ var Person = t.struct({
   password: t.String
 });
 
-const Proveedores = {};
 const options = {
   fields: {
     username: {
       autoCapitalize: 'none',
-      autoCorrect: false
+      autoCorrect: false,
     },
     password: {
       autoCapitalize: 'none',
@@ -38,23 +37,7 @@ const options = {
     }
   }
 }
-function getProveedores() {
-       fetch("http://localhost:3000/api/proveedores", {
-        method: "GET",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-        })
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log(responseData)
-        for (var i = 0; i < responseData.length; i ++){
-          Proveedores[responseData[i].id] = responseData[i].razon_social;
-        }
-              console.log(Proveedores)
-      })
-}
+
 class Login extends React.Component {
 
   async _onValueChange(item, selectedValue) {
@@ -76,13 +59,15 @@ class Login extends React.Component {
 
 _handleResponse(response) {
   console.log('handling response')
-  console.log(response)
+  console.log(response);
+  this._onValueChange('@User',response.username);
+  this._onValueChange('@Password',response.password);
   if (response.username) {
     console.log('sending component')
     this.props.navigator.push({
-      title: 'Captura',
-      component: Captura,
-      passProps: {username: response.username, proveedores: Proveedores}
+      title: 'Scan',
+      component: Scan,
+      passProps: {username: response.username}
     });
   } else {
     this.setState({ message: 'Wrong username or password.'});
@@ -91,7 +76,7 @@ _handleResponse(response) {
   _userLogin() {
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
-      fetch("http://localhost:3000/api/auth/signin", {
+      fetch("https://dymingenieros.herokuapp.com/api/auth/signin", {
         method: "POST",
         headers: {
           'Accept': 'application/json',
@@ -112,12 +97,12 @@ _handleResponse(response) {
       .done();
     }
   }
-
   render() {
+
     return (
       <View style={styles.container}>
         <View style={styles.row}>
-        <Image source={require('./Resources/dym-logo.png')} style={styles.image}/>
+        <Image source={require('./Images/dym-logo.png')} style={styles.image}/>
         </View>
         <View style={styles.row}>
           <Form
@@ -138,8 +123,8 @@ _handleResponse(response) {
 
 var styles = StyleSheet.create({
   container: {
+    flex:1,
     justifyContent: 'center',
-    marginTop: 50,
     padding: 20,
     backgroundColor: '#ffffff',
   },
@@ -164,7 +149,9 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
 image: {
-  height: 84
+  height: 84,
+      alignSelf: 'center',
+      marginBottom: 30
 }
 });
 

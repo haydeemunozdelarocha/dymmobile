@@ -7,7 +7,7 @@
 var React = require('react');
 var ReactNative = require('react-native');
 
-var Login = require('./Login');
+var Loading = require('./Loading');
 
 var styles = ReactNative.StyleSheet.create({
   container: {
@@ -16,13 +16,15 @@ var styles = ReactNative.StyleSheet.create({
 });
 
 class dymcapturaApp extends React.Component {
+
   render() {
     return (
       <ReactNative.NavigatorIOS
+        navigationBarHidden = {true}
         style={styles.container}
         initialRoute={{
-          title: 'Login',
-          component: Login
+          title: 'Loading',
+          component: Loading
         }}/>
     );
   }
