@@ -57,7 +57,6 @@ export default class Login extends React.Component {
   }
 
   _userLogin() {
-    console.log(this.refs.form);
     let userInput = this.refs.form.getValue();
 
     if (userInput) {

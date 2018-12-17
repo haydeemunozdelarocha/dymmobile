@@ -55,7 +55,7 @@ export default class Captura extends React.Component {
   }
 
   getMateriales(proveedor_id) {
-    fetch("https://dymingenieros.herokuapp.com/api/materiales/"+proveedor_id, {
+    fetch(`https://dymingenieros.herokuapp.com/api/materiales/${proveedor_id}`, {
       method: "GET",
       headers: {
         'Accept': 'application/json',
@@ -65,11 +65,12 @@ export default class Captura extends React.Component {
     .then((response) => response.json())
     .then((responseData) => {
       let materiales = {};
+      console.log(responseData);
 
       for (var i = 0; i < responseData.length; i++) {
         materiales[responseData[i].id.toString()] = responseData[i].nombre_concepto;
       }
-      this.setState({ materiales:materiales })
+      this.setState({ materiales: materiales })
     })
   }
 
@@ -129,7 +130,7 @@ export default class Captura extends React.Component {
     });
 
     if (value.concepto_flete) {
-      if (value.proveedor_id && !value.material_id){
+      if (value.proveedor_id && !value.material_id) {
         this.getMateriales(value.proveedor_id)
       }
     }
@@ -159,6 +160,7 @@ export default class Captura extends React.Component {
       })
     }
   }
+
   handleResponse(response) {
     if (response) {
       this.props.navigator.push({
@@ -185,6 +187,7 @@ export default class Captura extends React.Component {
       secretKey: process.env.AWS_SECRET_ACCESS_KEY,
       successActionStatus: 201
     };
+
     RNS3.put(file, options).progress((e) => console.log(e.loaded / e.total)).then(response => {
       if (response.status !== 201) {
         AlertIOS.alert(
@@ -204,7 +207,7 @@ export default class Captura extends React.Component {
     let lastFile;
     fetch("http://10.5.5.9:8080/gp/gpMediaList")
       .then((response) => {
-        if (response.status === 200){
+        if (response.status === 200) {
           let result = JSON.parse(response._bodyText);
           lastDirectory = result.media[result.media.length - 1];
           lastFile = lastDirectory.fs[lastDirectory.fs.length - 1];
@@ -214,12 +217,12 @@ export default class Captura extends React.Component {
             'Por favor inténtelo de nuevo'
           );
         }
-      })
+      }).catch(error => console.log('error', error))
       .then(() => {
         if (lastDirectory) {
-          return this.savePhoto(lastDirectory.d,lastFile.n);
+          return this.savePhoto(lastDirectory.d, lastFile.n);
         }
-      });
+      })
   }
 
   takePhoto() {
@@ -262,7 +265,7 @@ export default class Captura extends React.Component {
 
   render() {
     return (
-        <ScrollView>
+        <ScrollView style={styles.container}>
           <Form
               ref="form"
               type={this.getForm(this.state)}
@@ -283,14 +286,16 @@ export default class Captura extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    height:1000,
-    justifyContent: 'center',
-    marginTop: 10,
+    height: 1000,
+    marginTop: 20,
     padding: 10,
     backgroundColor: '#ffffff',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '80%'
   },
   row:{
-    flex:1
+    flex: 1
   },
   title: {
     fontSize: 30,
@@ -309,7 +314,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     alignSelf: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 10
   },
   scrollView: {
     backgroundColor: 'gray'

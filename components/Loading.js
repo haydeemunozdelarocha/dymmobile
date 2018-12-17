@@ -19,10 +19,10 @@ export class Loading extends React.Component {
 
   getWIFI() {
     function handleFirstConnectivityChange() {
-      NetInfo.isConnected.removeEventListener('change', handleFirstConnectivityChange);
+      NetInfo.isConnected.removeEventListener('connectionChange', handleFirstConnectivityChange);
     }
 
-    NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
+    NetInfo.isConnected.addEventListener('connectionChange', handleFirstConnectivityChange);
 
     function handleFirstConnectivityChangeReach(reach) {
       if (reach === "none") {
@@ -35,10 +35,10 @@ export class Loading extends React.Component {
         connected = true;
       }
 
-      NetInfo.removeEventListener('change', handleFirstConnectivityChangeReach);
+      NetInfo.removeEventListener('connectionChange', handleFirstConnectivityChangeReach);
     }
 
-    NetInfo.addEventListener('change', handleFirstConnectivityChangeReach);
+    NetInfo.addEventListener('connectionChange', handleFirstConnectivityChangeReach);
   }
 
   loggedIn() {

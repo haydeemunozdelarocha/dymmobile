@@ -77,8 +77,7 @@ export default class Scan extends React.Component {
               ref="form"
               type={this.getForm(this.state)}
               options={this.state.options}
-              onChange={this.onChange.bind(this)}
-              value={this.state.value}
+              value={{camion_id: '8215259515'}}
           />
           <TouchableHighlight style={styles.button} onPress={this.submit.bind(this)} underlayColor='#99d9f4'>
             <Text style={styles.buttonText}>Buscar Camión</Text>
@@ -90,7 +89,7 @@ export default class Scan extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    height:1000,
+    height: 400,
     justifyContent: 'center',
     marginTop: 10,
     padding: 10,
